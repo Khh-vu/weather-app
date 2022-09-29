@@ -8,13 +8,7 @@ class HomeScreen extends StatelessWidget {
     final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('Country'),
-            Text('Date time'),
-          ],
-        ),
+        title: const Text('Country'),
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.white,
       ),
@@ -167,6 +161,22 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
+          const Spacer(),
+          RichText(
+            text: TextSpan(
+              text: 'Last Update:  ',
+              style: TextStyle(
+                color: Colors.white.withOpacity(.5),
+              ),
+              children: const <TextSpan>[
+                TextSpan(
+                  text: 'Date Time',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
         ],
       ),
     );
