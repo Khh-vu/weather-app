@@ -1,15 +1,15 @@
 class Weather {
   final String country;
   final String icon;
-  final double temp;
+  final num temp;
   final String weather;
   final String description;
-  final double windSpeed;
-  final double windGust;
-  final double pressure;
-  final int humidity;
-  final int visibility;
-  final double feelsLike;
+  final num windSpeed;
+  final num windGust;
+  final num pressure;
+  final num humidity;
+  final num visibility;
+  final num feelsLike;
   final DateTime dateTime;
 
   Weather({
@@ -30,10 +30,10 @@ class Weather {
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
       country: json['name'],
-      icon: json['weather']['icon'],
+      icon: json['weather'][0]['icon'],
       temp: json['main']['temp'],
-      weather: json['weather']['main'],
-      description: json['weather']['description'],
+      weather: json['weather'][0]['main'],
+      description: json['weather'][0]['description'],
       windSpeed: json['wind']['speed'],
       windGust: json['wind']['gust'],
       pressure: json['main']['pressure'],
@@ -42,5 +42,10 @@ class Weather {
       feelsLike: json['main']['feels_like'],
       dateTime: DateTime.fromMicrosecondsSinceEpoch(json['dt'] * 1000000),
     );
+  }
+
+  @override
+  String toString() {
+    return 'Weather(country: $country, icon: $icon, temp: $temp, weather: $weather, description: $description, windSpeed: $windSpeed, windGust: $windGust, pressure: $pressure, humidity: $humidity, visibility: $visibility, feelsLike: $feelsLike, dateTime: $dateTime)';
   }
 }
