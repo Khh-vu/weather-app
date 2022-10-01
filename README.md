@@ -1,6 +1,10 @@
-# weather_app
+# Weather App
 
 A new Flutter project.
+
+# Packages Used
+ * [Http](https://pub.dev/packages/http): Allows making network requests.
+ * [Intl](https://pub.dev/packages/intl): Format dates.
 
 ## Getting Started
 
