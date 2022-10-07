@@ -17,7 +17,7 @@ class SearchHistoryService {
       }
     }
 
-    prefs.setStringList('search_history', searchHistory);
+    await prefs.setStringList('search_history', searchHistory);
   }
 
   Future<List<String>> getSearchHistory() async {
@@ -35,11 +35,11 @@ class SearchHistoryService {
       searchHistory = searchHistory..removeWhere((item) => item == text);
     }
 
-    prefs.setStringList('search_history', searchHistory);
+    await prefs.setStringList('search_history', searchHistory);
   }
 
   Future<void> clearAllSearchHistory() async {
     final prefs = await _prefs;
-    prefs.setStringList('search_history', []);
+    await prefs.setStringList('search_history', []);
   }
 }

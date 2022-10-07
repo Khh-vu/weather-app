@@ -152,7 +152,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         onTap: () {
                           saveHistoryAndPop(
                             context,
-                            text: _citySearchList[index].city,
+                            text: _citySearchList[index].name,
                           );
                         },
                         leading: const Icon(Icons.location_city),
