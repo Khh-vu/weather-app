@@ -26,10 +26,12 @@ class _HomeScreenState extends State<HomeScreen> {
         double lat = position.latitude;
         double lon = position.longitude;
 
-        return WeatherApiClient().getCurrentWeatherByLocation(
+        final city = await WeatherApiClient().getCurrentCity(
           lat: lat,
           lon: lon,
         );
+
+        return WeatherApiClient().getCurrentWeatherByCityName(cityName: city);
       }
     } catch (e) {
       debugPrint(e.toString());

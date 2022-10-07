@@ -28,29 +28,6 @@ class WeatherApiClient {
     return uri;
   }
 
-  Future<Weather> getCurrentWeatherByLocation({
-    required double lat,
-    required double lon,
-  }) async {
-    final uri = _buildUri(
-      path: 'data/2.5/weather',
-      queryParameters: {
-        'lat': lat.toStringAsFixed(4),
-        'lon': lon.toStringAsFixed(4),
-        'units': 'metric',
-      },
-    );
-
-    final response = await http.get(uri);
-
-    if (response.statusCode != 200) {
-      throw Exception('${response.statusCode}: Failed to get data!');
-    }
-    final Map<String, dynamic> weatherJson = jsonDecode(response.body);
-
-    return Weather.fromJson(weatherJson);
-  }
-
   Future<Weather> getCurrentWeatherByCityName({
     required String cityName,
   }) async {
@@ -70,5 +47,27 @@ class WeatherApiClient {
     final Map<String, dynamic> weatherJson = jsonDecode(response.body);
 
     return Weather.fromJson(weatherJson);
+  }
+
+  Future<String> getCurrentCity({
+    required double lat,
+    required double lon,
+  }) async {
+    final uri = _buildUri(
+      path: 'geo/1.0/reverse',
+      queryParameters: {
+        'lat': lat.toStringAsFixed(4),
+        'lon': lon.toStringAsFixed(4),
+      },
+    );
+
+    final response = await http.get(uri);
+
+    if (response.statusCode != 200) {
+      throw Exception('${response.statusCode}: Failed to get data!');
+    }
+    final locationJson = jsonDecode(response.body) as List<dynamic>;
+
+    return '${locationJson[0]['name']}, ${locationJson[0]['country']}';
   }
 }
