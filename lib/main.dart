@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/views/home_screen.dart';
+
+import 'constants/color_schemes.dart';
+import 'views/home_screen.dart';
+import 'views/search_screen.dart';
+import 'views/setting_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,9 +19,18 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        scaffoldBackgroundColor: Colors.blueGrey.shade900,
+        colorScheme: lightColorScheme,
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkColorScheme,
+      ),
+      themeMode: ThemeMode.dark,
       home: const HomeScreen(),
+      routes: {
+        SearchScreen.routeName: (context) => const SearchScreen(),
+        SettingScreen.routeName: (context) => const SettingScreen(),
+      },
     );
   }
 }

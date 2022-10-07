@@ -32,5 +32,5 @@ class City extends Equatable {
   }
 
   @override
-  List<Object?> get props => [country, city, lat, lon];
+  List<Object?> get props => [lat, lon];
 }

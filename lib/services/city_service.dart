@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 
 import '../models/city.dart';
 
 class CityService {
-  static Future<List<City>> getCityList() async {
-    final cityJson = await rootBundle.loadString('assets/citylist.json');
+  static Future<List<City>> getCityList(BuildContext context) async {
+    final assetBundle = DefaultAssetBundle.of(context);
+    final cityJson = await assetBundle.loadString("assets/citylist.json");
 
     return compute(_decodeAndParseJson, cityJson);
   }
