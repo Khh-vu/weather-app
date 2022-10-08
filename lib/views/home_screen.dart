@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../models/weather.dart';
 import '../services/location_service.dart';
+import '../services/search_service.dart';
 import '../services/weather_api_client.dart';
 import 'search_screen.dart';
 import 'setting_screen.dart';
@@ -37,6 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
       debugPrint(e.toString());
     }
 
+    final lastSearchCity = await SearchHistoryService().getSearchHistory();
+
+    if (lastSearchCity.isNotEmpty) {
+      return WeatherApiClient().getCurrentWeatherByCityName(
+        cityName: lastSearchCity.first,
+      );
+    }
     return WeatherApiClient().getCurrentWeatherByCityName(cityName: 'Hanoi');
   }
 
