@@ -19,12 +19,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ThemeCubit>(
       create: (_) => ThemeCubit(),
-      child: BlocBuilder<ThemeCubit, ThemeState>(
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, state) {
           return MaterialApp(
             title: 'Weather App',
             debugShowCheckedModeBanner: false,
-            themeMode: context.read<ThemeCubit>().state.themeMode,
+            themeMode: state,
             theme: ThemeData(
               useMaterial3: true,
               colorScheme: lightColorScheme,

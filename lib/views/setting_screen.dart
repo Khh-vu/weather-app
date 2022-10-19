@@ -18,18 +18,18 @@ class SettingScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         children: <Widget>[
-          BlocBuilder<ThemeCubit, ThemeState>(
+          BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, state) {
               return ListTile(
                 leading: SizedBox(
                   height: double.infinity,
-                  child: state.isLight
+                  child: state == ThemeMode.light
                       ? const Icon(Icons.light_mode)
                       : const Icon(Icons.dark_mode),
                 ),
                 title: const Text('Theme'),
                 subtitle: Text(
-                  toBeginningOfSentenceCase(state.themeMode.name)!,
+                  toBeginningOfSentenceCase(state.name)!,
                 ),
                 onTap: () {
                   showDialog(
@@ -45,7 +45,7 @@ class SettingScreen extends StatelessWidget {
                                 themeMode.name,
                               )!),
                               value: themeMode,
-                              groupValue: state.themeMode,
+                              groupValue: state,
                               toggleable: true,
                               onChanged: (value) {
                                 if (value != null) {
@@ -56,24 +56,6 @@ class SettingScreen extends StatelessWidget {
                             ),
                         ],
                       ),
-                      // ListView.builder(
-                      //   reverse: true,
-                      //   shrinkWrap: true,
-                      //   itemCount: ThemeMode.values.length,
-                      //   itemBuilder: (_, index) {
-                      //     return RadioListTile<ThemeMode>(
-                      //       title: Text(toBeginningOfSentenceCase(
-                      //         ThemeMode.values[index].name,
-                      //       )!),
-                      //       value: ThemeMode.values[index],
-                      //       groupValue: state.themeMode,
-                      //       toggleable: true,
-                      //       onChanged: (value) {
-                      //         context.read<ThemeCubit>().changeTheme(value!);
-                      //       },
-                      //     );
-                      //   },
-                      // ),
                       contentPadding: EdgeInsets.zero,
                       actions: <Widget>[
                         TextButton(
