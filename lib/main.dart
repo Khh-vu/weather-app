@@ -1,47 +1,46 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'constants/color_schemes.dart';
+import 'cubits/theme/theme_cubit.dart';
 import 'views/home_screen.dart';
 import 'views/search_screen.dart';
 import 'views/setting_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final savedThemeMode = await AdaptiveTheme.getThemeMode();
-  runApp(MyApp(savedThemeMode: savedThemeMode));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, this.savedThemeMode});
-
-  final AdaptiveThemeMode? savedThemeMode;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveTheme(
-      initial: savedThemeMode ?? AdaptiveThemeMode.system,
-      light: ThemeData(
-        useMaterial3: true,
-        colorScheme: lightColorScheme,
+    return BlocProvider<ThemeCubit>(
+      create: (_) => ThemeCubit(),
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'Weather App',
+            debugShowCheckedModeBanner: false,
+            themeMode: context.read<ThemeCubit>().state.themeMode,
+            theme: ThemeData(
+              useMaterial3: true,
+              colorScheme: lightColorScheme,
+            ),
+            darkTheme: ThemeData(
+              useMaterial3: true,
+              colorScheme: darkColorScheme,
+            ),
+            home: const HomeScreen(),
+            routes: {
+              SearchScreen.routeName: (context) => const SearchScreen(),
+              SettingScreen.routeName: (context) => const SettingScreen(),
+            },
+          );
+        },
       ),
-      dark: ThemeData(
-        useMaterial3: true,
-        colorScheme: darkColorScheme,
-      ),
-      builder: (theme, darkTheme) {
-        return MaterialApp(
-          title: 'Weather App',
-          debugShowCheckedModeBanner: false,
-          theme: theme,
-          darkTheme: darkTheme,
-          home: const HomeScreen(),
-          routes: {
-            SearchScreen.routeName: (context) => const SearchScreen(),
-            SettingScreen.routeName: (context) => const SettingScreen(),
-          },
-        );
-      },
     );
   }
 }

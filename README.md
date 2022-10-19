@@ -8,7 +8,7 @@ A new Flutter project.
  * [Geolocator](https://pub.dev/packages/geolocator): Get the current device location.
  * [Equatable](https://pub.dev/packages/equatable): Simplify the process of comparing object.
  * [SharedPreferences](https://pub.dev/packages/shared_preferences): Read and write key-value pairs in persistent storage.
- * [AdaptiveTheme](https://pub.dev/packages/adaptive_theme): Allows to change theme dynamically.
+ * [FlutterBloc](https://pub.dev/packages/flutter_bloc): For state management.
 
 ## Getting Started
 
