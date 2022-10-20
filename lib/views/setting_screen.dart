@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../cubits/temp_units/temp_units_cubit.dart';
-import '../cubits/theme/theme_cubit.dart';
+import '../cubits/cubit.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});

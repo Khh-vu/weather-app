@@ -5,7 +5,6 @@ A new Flutter project.
 # Packages Used
  * [Http](https://pub.dev/packages/http): Allows to make network requests.
  * [Intl](https://pub.dev/packages/intl): Deal with Date and String formatting.
- * [Geolocator](https://pub.dev/packages/geolocator): Get the current device location.
  * [Equatable](https://pub.dev/packages/equatable): Simplify the process of comparing object.
  * [SharedPreferences](https://pub.dev/packages/shared_preferences): Read and write key-value pairs in persistent storage.
  * [FlutterBloc](https://pub.dev/packages/flutter_bloc): For state management.

@@ -25,6 +25,19 @@ class Weather extends Equatable {
     required this.dateTime,
   });
 
+  factory Weather.initial() => Weather(
+        city: '',
+        icon: '',
+        temp: 0,
+        weather: '',
+        description: '',
+        windSpeed: 0,
+        pressure: 0,
+        humidity: 0,
+        feelsLike: 0,
+        dateTime: DateTime(0),
+      );
+
   factory Weather.fromJson(Map<String, dynamic> json) {
     return Weather(
       city: json['name'],
