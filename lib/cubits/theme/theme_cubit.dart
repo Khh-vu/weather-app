@@ -18,7 +18,9 @@ class ThemeCubit extends Cubit<ThemeMode> {
     }
   }
 
-  void changeTheme(ThemeMode mode) async {
+  void changeTheme(ThemeMode? mode) async {
+    if (mode == null) return;
+
     final prefs = await _prefs;
     await prefs.setString('theme_mode', mode.name);
     emit(mode);

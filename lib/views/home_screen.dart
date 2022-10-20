@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 
+import '../cubits/temp_units/temp_units_cubit.dart';
 import '../models/weather.dart';
 import '../services/location_service.dart';
 import '../services/search_service.dart';
@@ -10,7 +11,9 @@ import 'search_screen.dart';
 import 'setting_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, required this.units});
+
+  final TemperatureUnits units;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -32,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
           lon: lon,
         );
 
-        return WeatherApiClient().getCurrentWeatherByCityName(cityName: city);
+        return WeatherApiClient().getWeather(cityName: city);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -41,11 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final lastSearchCity = await SearchHistoryService().getSearchHistory();
 
     if (lastSearchCity.isNotEmpty) {
-      return WeatherApiClient().getCurrentWeatherByCityName(
-        cityName: lastSearchCity.first,
-      );
+      return WeatherApiClient().getWeather(cityName: lastSearchCity.first);
     }
-    return WeatherApiClient().getCurrentWeatherByCityName(cityName: 'Hanoi');
+    return WeatherApiClient().getWeather(cityName: 'Hanoi');
   }
 
   @override
@@ -81,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
               child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 slivers: <Widget>[
                   SliverAppBar(
                     title: Text(weather.city),
@@ -92,8 +94,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           if (city != null) {
                             setState(() {
-                              futureWeather = WeatherApiClient()
-                                  .getCurrentWeatherByCityName(cityName: city);
+                              futureWeather = WeatherApiClient().getWeather(
+                                cityName: city,
+                              );
                             });
                           }
                         },
@@ -125,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 scale: 1.5,
                               ),
                               Text(
-                                '${weather.temp} °C',
+                                widget.units.temperature(weather.temp),
                                 style: textTheme.headline3,
                               ),
                               const SizedBox(height: 10),
@@ -220,7 +223,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text('${weather.humidity} %'),
-                                    Text('${weather.feelsLike} °C'),
+                                    Text(
+                                      widget.units.temperature(
+                                        weather.feelsLike,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),

@@ -1,6 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/weather.dart';
@@ -23,20 +23,17 @@ class WeatherApiClient {
       queryParameters: query,
     );
 
-    debugPrint('Fetching $uri');
+    log('Fetching $uri');
 
     return uri;
   }
 
-  Future<Weather> getCurrentWeatherByCityName({
+  Future<Weather> getWeather({
     required String cityName,
   }) async {
     final uri = _buildUri(
       path: 'data/2.5/weather',
-      queryParameters: {
-        'q': cityName,
-        'units': 'metric',
-      },
+      queryParameters: {'q': cityName},
     );
 
     final response = await http.get(uri);
