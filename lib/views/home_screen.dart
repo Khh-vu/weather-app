@@ -14,13 +14,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<void> _getCurrentWeather() async {
-    await context.read<WeatherCubit>().fetchWeather();
-  }
-
   @override
   void initState() {
-    _getCurrentWeather();
+    BlocProvider.of<WeatherCubit>(context).fetchWeather();
     super.initState();
   }
 
@@ -41,10 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             case WeatherStatus.error:
             case WeatherStatus.loaded:
-              final units = context.watch<TempUnitsCubit>().state;
+              final units = context.watch<WeatherCubit>().state.units;
               return RefreshIndicator(
                 edgeOffset: 20,
-                onRefresh: () => _getCurrentWeather(),
+                onRefresh: () => context.read<WeatherCubit>().fetchWeather(),
                 child: CustomScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   slivers: <Widget>[

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/weather.dart';
 import '../../repositories/weather_repository.dart';
@@ -8,10 +9,14 @@ import '../../services/search_service.dart';
 part 'weather_state.dart';
 
 class WeatherCubit extends Cubit<WeatherState> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   final WeatherRepository weatherRepository;
 
   WeatherCubit({required this.weatherRepository})
-      : super(WeatherState.initial());
+      : super(WeatherState.initial()) {
+    getTempUnits();
+  }
 
   Future<void> fetchWeather([String? cityName]) async {
     emit(state.copyWith(status: WeatherStatus.loading));
@@ -39,5 +44,23 @@ class WeatherCubit extends Cubit<WeatherState> {
         error: e.toString(),
       ));
     }
+  }
+
+  void getTempUnits() async {
+    final prefs = await _prefs;
+    final data = prefs.getString('temp_units');
+
+    if (data != null) {
+      emit(state.copyWith(
+        units: TemperatureUnits.values.byName(data),
+      ));
+    }
+  }
+
+  void changeUnits(TemperatureUnits? units) async {
+    if (units == null) return;
+    final prefs = await _prefs;
+    await prefs.setString('temp_units', units.name);
+    emit(state.copyWith(units: units));
   }
 }

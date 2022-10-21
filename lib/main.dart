@@ -21,16 +21,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider(
-      create: (_) => WeatherRepository(
-          // weatherApiClient: WeatherApiClient(),
-          ),
+      create: (_) => WeatherRepository(),
       child: MultiBlocProvider(
         providers: <BlocProvider>[
           BlocProvider<ThemeCubit>(
             create: (_) => ThemeCubit(),
-          ),
-          BlocProvider<TempUnitsCubit>(
-            create: (_) => TempUnitsCubit(),
           ),
           BlocProvider<WeatherCubit>(
             create: (context) => WeatherCubit(

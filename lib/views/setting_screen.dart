@@ -59,16 +59,16 @@ class SettingScreen extends StatelessWidget {
               ),
             ),
           ),
-          BlocConsumer<TempUnitsCubit, TemperatureUnits>(
+          BlocConsumer<WeatherCubit, WeatherState>(
             listener: (context, state) => Navigator.of(context).pop(),
-            builder: (context, tempUnits) => ListTile(
+            builder: (context, state) => ListTile(
               leading: const SizedBox(
                 height: double.infinity,
                 child: Icon(Icons.thermostat),
               ),
               title: const Text('Temperature Units'),
               subtitle: Text(
-                toBeginningOfSentenceCase(tempUnits.name)!,
+                toBeginningOfSentenceCase(state.units.name)!,
               ),
               onTap: () => showDialog(
                 context: context,
@@ -81,10 +81,10 @@ class SettingScreen extends StatelessWidget {
                         RadioListTile<TemperatureUnits>(
                           title: Text(toBeginningOfSentenceCase(units.name)!),
                           value: units,
-                          groupValue: tempUnits,
+                          groupValue: state.units,
                           toggleable: true,
                           onChanged: (value) {
-                            context.read<TempUnitsCubit>().changeUnits(value);
+                            context.read<WeatherCubit>().changeUnits(value);
                           },
                         ),
                     ],
