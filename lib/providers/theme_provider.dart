@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ThemeCubit extends Cubit<ThemeMode> {
+final themeNotifierProvider = StateNotifierProvider<ThemeNotifier, ThemeMode>(
+  (ref) => ThemeNotifier(),
+);
+
+class ThemeNotifier extends StateNotifier<ThemeMode> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  ThemeCubit() : super(ThemeMode.system) {
+  ThemeNotifier() : super(ThemeMode.system) {
     getThemeMode();
   }
 
@@ -14,7 +18,7 @@ class ThemeCubit extends Cubit<ThemeMode> {
     final data = prefs.getString('theme_mode');
 
     if (data != null) {
-      emit(ThemeMode.values.byName(data));
+      state = ThemeMode.values.byName(data);
     }
   }
 
@@ -23,6 +27,6 @@ class ThemeCubit extends Cubit<ThemeMode> {
 
     final prefs = await _prefs;
     await prefs.setString('theme_mode', mode.name);
-    emit(mode);
+    state = mode;
   }
 }

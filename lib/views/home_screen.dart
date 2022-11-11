@@ -1,46 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../cubits/cubit.dart';
+import '../providers/weather/weather_provider.dart';
 import 'search_screen.dart';
 import 'setting_screen.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    BlocProvider.of<WeatherCubit>(context).fetchWeather();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
     final textTheme = Theme.of(context).textTheme;
 
+    final state = ref.watch(weatherNotifierProvider);
+
     return Scaffold(
-      body: BlocBuilder<WeatherCubit, WeatherState>(
-        buildWhen: (previous, current) => previous != current,
-        builder: (context, state) {
+      body: Consumer(
+        builder: (context, ref, child) {
           switch (state.status) {
             case WeatherStatus.initial:
             case WeatherStatus.loading:
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
+              return const Center(child: CircularProgressIndicator());
             case WeatherStatus.error:
             case WeatherStatus.loaded:
-              final units = context.watch<WeatherCubit>().state.units;
+              final units = ref.watch(weatherNotifierProvider).units;
               return RefreshIndicator(
                 edgeOffset: 20,
-                onRefresh: () => context.read<WeatherCubit>().fetchWeather(),
+                onRefresh:
+                    ref.read(weatherNotifierProvider.notifier).fetchWeather,
                 child: CustomScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   slivers: <Widget>[
@@ -52,21 +41,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             final city = await Navigator.of(context)
                                 .pushNamed(SearchScreen.routeName) as String?;
 
-                            if (!mounted) return;
-
                             if (city != null) {
-                              context.read<WeatherCubit>().fetchWeather(city);
+                              ref
+                                  .read(weatherNotifierProvider.notifier)
+                                  .fetchWeather(city);
                             }
                           },
                           tooltip: 'Search',
                           icon: const Icon(Icons.search),
                         ),
                         IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              SettingScreen.routeName,
-                            );
-                          },
+                          onPressed: () => Navigator.of(context).pushNamed(
+                            SettingScreen.routeName,
+                          ),
                           tooltip: 'Setting',
                           icon: const Icon(Icons.settings),
                         ),

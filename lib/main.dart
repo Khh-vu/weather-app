@@ -1,61 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'constants/color_schemes.dart';
-import 'cubits/cubit.dart';
-import 'repositories/weather_repository.dart';
-import 'simple_bloc_observer.dart';
+import 'providers/theme_provider.dart';
 import 'views/home_screen.dart';
 import 'views/search_screen.dart';
 import 'views/setting_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Bloc.observer = SimpleBlocObserver();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (_) => WeatherRepository(),
-      child: MultiBlocProvider(
-        providers: <BlocProvider>[
-          BlocProvider<ThemeCubit>(
-            create: (_) => ThemeCubit(),
-          ),
-          BlocProvider<WeatherCubit>(
-            create: (context) => WeatherCubit(
-              weatherRepository: context.read<WeatherRepository>(),
-            ),
-          ),
-        ],
-        child: BlocBuilder<ThemeCubit, ThemeMode>(
-          builder: (context, themeMode) {
-            return MaterialApp(
-              title: 'Weather App',
-              debugShowCheckedModeBanner: false,
-              themeMode: themeMode,
-              theme: ThemeData(
-                useMaterial3: true,
-                colorScheme: lightColorScheme,
-              ),
-              darkTheme: ThemeData(
-                useMaterial3: true,
-                colorScheme: darkColorScheme,
-              ),
-              home: const HomeScreen(),
-              routes: {
-                SearchScreen.routeName: (context) => const SearchScreen(),
-                SettingScreen.routeName: (context) => const SettingScreen(),
-              },
-            );
-          },
-        ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeNotifierProvider);
+
+    return MaterialApp(
+      title: 'Weather App',
+      debugShowCheckedModeBanner: false,
+      themeMode: themeMode,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: lightColorScheme,
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkColorScheme,
+      ),
+      home: const HomeScreen(),
+      routes: {
+        SearchScreen.routeName: (context) => const SearchScreen(),
+        SettingScreen.routeName: (context) => const SettingScreen(),
+      },
     );
   }
 }

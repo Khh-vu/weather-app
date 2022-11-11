@@ -1,4 +1,4 @@
-part of 'weather_cubit.dart';
+part of 'weather_provider.dart';
 
 enum WeatherStatus { initial, loading, loaded, error }
 
@@ -52,6 +52,7 @@ class WeatherState extends Equatable {
       error: '',
     );
   }
+
   @override
   List<Object?> get props => [status, weather, units, error];
 }
