@@ -17,7 +17,8 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeNotifierProvider);
+    ref.read(themeProvider.notifier).getThemeMode();
+    final themeMode = ref.watch(themeProvider);
 
     return MaterialApp(
       title: 'Weather App',

@@ -19,7 +19,7 @@ class SettingScreen extends ConsumerWidget {
       (_, __) => Navigator.of(context).pop(),
     );
 
-    final themeMode = ref.watch(themeNotifierProvider);
+    final themeMode = ref.watch(themeProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -50,10 +50,9 @@ class SettingScreen extends ConsumerWidget {
                       RadioListTile<ThemeMode>(
                         title: Text(toBeginningOfSentenceCase(mode.name)!),
                         value: mode,
-                        groupValue: ref.watch(themeNotifierProvider),
-                        onChanged: (value) => ref
-                            .read(themeNotifierProvider.notifier)
-                            .changeTheme(value),
+                        groupValue: ref.watch(themeProvider),
+                        onChanged: (value) =>
+                            ref.read(themeProvider.notifier).changeTheme(value),
                       ),
                   ],
                 ),
