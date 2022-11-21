@@ -1,23 +1,26 @@
-import 'dart:convert';
 import 'dart:developer';
 
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 import '../models/weather.dart';
 
 class WeatherRepository {
+  final Dio _dio;
+
+  WeatherRepository({Dio? dio}) : _dio = dio ?? Dio();
+
   Future<Weather> fetchWeather(String cityName) async {
     final uri = _buildUri(
       path: 'data/2.5/weather',
       queryParameters: {'q': cityName},
     );
 
-    final response = await http.get(uri);
+    final response = await _dio.getUri(uri);
 
     if (response.statusCode != 200) {
-      throw Exception('${response.statusCode}: ${response.reasonPhrase}');
+      throw Exception('${response.statusCode}: ${response.statusMessage}');
     }
-    final Map<String, dynamic> weatherJson = jsonDecode(response.body);
+    final weatherJson = response.data as Map<String, dynamic>;
 
     if (weatherJson.isEmpty) {
       throw Exception('Cannot get the weather of the city');
